@@ -1,0 +1,52 @@
+[
+    {
+        "id": 1,
+        "question": "What is the Transformer architecture?",
+        "ground_truth": "The Transformer is a neural network architecture based entirely on attention mechanisms. It uses an encoder-decoder structure and avoids recurrence and convolution, allowing greater parallelization during training."
+    },
+    {
+        "id": 2,
+        "question": "How does self-attention work?",
+        "ground_truth": "Self-attention allows each position in a sequence to attend to other positions in the same sequence. It calculates attention weights based on queries, keys, and values, allowing the model to focus on relevant tokens."
+    },
+    {
+        "id": 3,
+        "question": "What is multi-head attention?",
+        "ground_truth": "Multi-head attention performs multiple attention operations in parallel using different learned projections of queries, keys, and values. The outputs are combined, allowing the model to capture different relationships and representation subspaces."
+    },
+    {
+        "id": 4,
+        "question": "Why does the Transformer not use recurrence?",
+        "ground_truth": "The Transformer removes recurrence and instead relies on attention mechanisms. This allows computations over sequence positions to be performed in parallel and improves the ability to model long-range dependencies."
+    },
+    {
+        "id": 5,
+        "question": "What are the advantages of self-attention?",
+        "ground_truth": "Self-attention can connect positions regardless of their distance, requires fewer sequential operations than recurrent networks, and allows better parallelization. It can efficiently model dependencies between distant tokens."
+    },
+    {
+        "id": 6,
+        "question": "What is encoder-decoder attention?",
+        "ground_truth": "Encoder-decoder attention is an attention mechanism where queries come from the decoder while keys and values come from the encoder output. This allows each decoder position to attend to relevant parts of the input sequence."
+    },
+    {
+        "id": 7,
+        "question": "What is transfer learning?",
+        "ground_truth": "Transfer learning is a machine learning approach where knowledge learned from one task is reused to improve performance on another related task. A model is typically pretrained on a large dataset and then adapted or fine-tuned for a specific downstream task."
+    },
+    {
+        "id": 8,
+        "question": "How does causal self-attention work?",
+        "ground_truth": "Causal self-attention uses a mask so that each position can attend only to previous positions and itself, but not future positions. This enables autoregressive generation because predictions cannot use information from future tokens."
+    },
+    {
+        "id": 9,
+        "question": "What are positional encodings used for?",
+        "ground_truth": "Positional encodings provide information about the position of tokens in a sequence. They are added to input embeddings because the Transformer architecture does not use recurrence or convolution and therefore does not inherently understand token order."
+    },
+    {
+        "id": 10,
+        "question": "What are the main components of a Transformer?",
+        "ground_truth": "The main components of a Transformer include an encoder, a decoder, multi-head attention, feed-forward neural networks, residual connections, layer normalization, positional encodings, and output layers."
+    }
+]

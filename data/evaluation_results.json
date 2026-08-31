@@ -1,0 +1,362 @@
+[
+    {
+        "id": 1,
+        "question": "What is the Transformer architecture?",
+        "answer": "The Transformer architecture was initially shown to be effective for machine translation (Vaswani et al., 2017). It has since been used in a wide variety of NLP settings, including but not limited to language modeling (Radford et al., 2018; Al-Rfou et al., 2019) and classification tasks (Devlin et al., 2018; Yang et al., 2019).\n\nThe primary building block of the Transformer is self-attention (Cheng et al., 2016). Self-attention processes a sequence by replacing each element with a weighted average of the rest of the sequence.\n\nOverall, our implementation closely follows its originally proposed architecture and refers readers to the original paper (Vaswani et al., 2017) for a more detailed introduction.",
+        "ground_truth": "The Transformer is a neural network architecture based entirely on attention mechanisms. It uses an encoder-decoder structure and avoids recurrence and convolution, allowing greater parallelization during training.",
+        "contexts": [
+            "models based on the \u201cTransformer\u201d architecture (Vaswani et al., 2017). The Transformer\nwas initially shown to be effective for machine translation, but it has subsequently been\nused in a wide variety of NLP settings (Radford et al., 2018; Devlin et al., 2018; McCann\net al., 2018; Yu et al., 2018). Due to its increasing ubiquity, all of the models we study are\nbased on the Transformer architecture. Apart from the details mentioned below and the\nvariants we explore in Section 3.2, we do not deviate significantly from this architecture as\noriginally proposed. Instead of providing a comprehensive definition of this model, we refer\nthe interested reader to the original paper (Vaswani et al., 2017) or follow-up tutorials3,4 for\na more detailed introduction.\nThe primary building block of the Transformer is self-attention (Cheng et al., 2016).\nSelf-attention is a variant of attention (Graves, 2013; Bahdanau et al., 2015) that processes",
+            "Figure 1: The Transformer - model architecture.\nThe Transformer follows this overall architecture using stacked self-attention and point-wise, fully\nconnected layers for both the encoder and decoder, shown in the left and right halves of Figure 1,\nrespectively.\n3.1\nEncoder and Decoder Stacks\nEncoder:\nThe encoder is composed of a stack of N = 6 identical layers. Each layer has two\nsub-layers. The first is a multi-head self-attention mechanism, and the second is a simple, position-\nwise fully connected feed-forward network. We employ a residual connection [11] around each of\nthe two sub-layers, followed by layer normalization [1]. That is, the output of each sub-layer is\nLayerNorm(x + Sublayer(x)), where Sublayer(x) is the function implemented by the sub-layer\nitself. To facilitate these residual connections, all sub-layers in the model, as well as the embedding\nlayers, produce outputs of dimension dmodel = 512.\nDecoder:",
+            "The primary building block of the Transformer is self-attention (Cheng et al., 2016).\nSelf-attention is a variant of attention (Graves, 2013; Bahdanau et al., 2015) that processes\na sequence by replacing each element by a weighted average of the rest of the sequence.\nThe original Transformer consisted of an encoder-decoder architecture and was intended\nfor sequence-to-sequence (Sutskever et al., 2014; Kalchbrenner et al., 2014) tasks. It has\nrecently also become common to use models consisting of a single Transformer layer stack,\nwith varying forms of self-attention used to produce architectures appropriate for language\nmodeling (Radford et al., 2018; Al-Rfou et al., 2019) or classification and span prediction\ntasks (Devlin et al., 2018; Yang et al., 2019). We empirically explore these architectural\nvariants in Section 3.2.\nOverall, our encoder-decoder Transformer implementation closely follows its originally-",
+            "coder based on the original implementation de-\nscribed in Vaswani et al. (2017) and released in\nthe tensor2tensor library.1 Because the use\nof Transformers has become common and our im-\nplementation is almost identical to the original,\nwe will omit an exhaustive background descrip-\ntion of the model architecture and refer readers to\nVaswani et al. (2017) as well as excellent guides\nsuch as \u201cThe Annotated Transformer.\u201d2\nIn this work, we denote the number of layers\n(i.e., Transformer blocks) as L, the hidden size as\nH, and the number of self-attention heads as A.3\nWe primarily report results on two model sizes:\nBERTBASE (L=12, H=768, A=12, Total Param-\neters=110M) and BERTLARGE (L=24, H=1024,\nA=16, Total Parameters=340M).\nBERTBASE was chosen to have the same model\nsize as OpenAI GPT for comparison purposes.\nCritically, however, the BERT Transformer uses\nbidirectional self-attention, while the GPT Trans-\nformer uses constrained self-attention where every",
+            "Table 3: Variations on the Transformer architecture. Unlisted values are identical to those of the base\nmodel. All metrics are on the English-to-German translation development set, newstest2013. Listed\nperplexities are per-wordpiece, according to our byte-pair encoding, and should not be compared to\nper-word perplexities.\nN\ndmodel\ndff\nh\ndk\ndv\nPdrop\n\u03f5ls\ntrain\nPPL\nBLEU\nparams\nsteps\n(dev)\n(dev)\n\u00d7106\nbase\n6\n512\n2048\n8\n64\n64\n0.1\n0.1\n100K\n4.92\n25.8\n65\n(A)\n1\n512\n512\n5.29\n24.9\n4\n128\n128\n5.00\n25.5\n16\n32\n32\n4.91\n25.8\n32\n16\n16\n5.01\n25.4\n(B)\n16\n5.16\n25.1\n58\n32\n5.01\n25.4\n60\n(C)\n2\n6.11\n23.7\n36\n4\n5.19\n25.3\n50\n8\n4.88\n25.5\n80\n256\n32\n32\n5.75\n24.5\n28\n1024\n128\n128\n4.66\n26.0\n168\n1024\n5.12\n25.4\n53\n4096\n4.75\n26.2\n90\n(D)\n0.0\n5.77\n24.6\n0.2\n4.95\n25.5\n0.0\n4.67\n25.3\n0.2\n5.47\n25.7\n(E)\npositional embedding instead of sinusoids\n4.92\n25.7\nbig\n6\n1024\n4096\n16\n0.3\n300K\n4.33\n26.4\n213\ndevelopment set, newstest2013. We used beam search as described in the previous section, but no"
+        ],
+        "response_time_seconds": 85.4,
+        "sources": [
+            {
+                "source": "1910.10683v4.pdf",
+                "page": 4
+            },
+            {
+                "source": "1706.03762v7.pdf",
+                "page": 3
+            },
+            {
+                "source": "1910.10683v4.pdf",
+                "page": 4
+            },
+            {
+                "source": "1810.04805v2.pdf",
+                "page": 3
+            },
+            {
+                "source": "1706.03762v7.pdf",
+                "page": 9
+            }
+        ]
+    },
+    {
+        "id": 2,
+        "question": "How does self-attention work?",
+        "answer": "Self-attention is an attention mechanism that relates different positions of a single sequence to compute a representation of the sequence. It has been used successfully in various tasks, including reading comprehension, abstractive summarization, textual entailment, and learning task-independent sentence representations.\n\nIn the Transformer model, self-attention is used as a way for each position in the encoder (or decoder) to attend over all positions in the previous layer (in the case of the encoder), or up to and including that position itself. This allows every position in the sequence to be considered when computing the representation.\n\nThe output of the final decoder block is fed into a dense layer with a softmax output, whose weights are shared with the input embedding matrix. All attention mechanisms in the Transformer are split up into independent \"heads\" whose outputs are concatenated before being further processed.\n\nSelf-attention can attend over long distances due to its linear or logarithmic scaling mechanism, but this makes it more difficult to learn dependencies between distant positions. To counteract this effect, Multi-Head Attention is used as described in section 3.2, which reduces the effective resolution while allowing for more dependencies to be learned.\n\nIn addition, relative position embeddings (Shaw et al., 2018; Huang et al., 2018a) have become more common, providing an explicit position signal to the Transformer.",
+        "ground_truth": "Self-attention allows each position in a sequence to attend to other positions in the same sequence. It calculates attention weights based on queries, keys, and values, allowing the model to focus on relevant tokens.",
+        "contexts": [
+            "in the distance between positions, linearly for ConvS2S and logarithmically for ByteNet. This makes\nit more difficult to learn dependencies between distant positions [12]. In the Transformer this is\nreduced to a constant number of operations, albeit at the cost of reduced effective resolution due\nto averaging attention-weighted positions, an effect we counteract with Multi-Head Attention as\ndescribed in section 3.2.\nSelf-attention, sometimes called intra-attention is an attention mechanism relating different positions\nof a single sequence in order to compute a representation of the sequence. Self-attention has been\nused successfully in a variety of tasks including reading comprehension, abstractive summarization,\ntextual entailment and learning task-independent sentence representations [4, 27, 28, 22].\nEnd-to-end memory networks are based on a recurrent attention mechanism instead of sequence-",
+            "Exploring the Limits of Transfer Learning\nmechanism after each self-attention layer that attends to the output of the encoder. The\nself-attention mechanism in the decoder also uses a form of autoregressive or causal self-\nattention, which only allows the model to attend to past outputs. The output of the final\ndecoder block is fed into a dense layer with a softmax output, whose weights are shared with\nthe input embedding matrix. All attention mechanisms in the Transformer are split up into\nindependent \u201cheads\u201d whose outputs are concatenated before being further processed.\nSince self-attention is order-independent (i.e. it is an operation on sets), it is common\nto provide an explicit position signal to the Transformer. While the original Transformer\nused a sinusoidal position signal or learned position embeddings, it has recently become\nmore common to use relative position embeddings (Shaw et al., 2018; Huang et al., 2018a).",
+            "Applications of Attention in our Model\nThe Transformer uses multi-head attention in three different ways:\n\u2022 In \"encoder-decoder attention\" layers, the queries come from the previous decoder layer,\nand the memory keys and values come from the output of the encoder. This allows every\nposition in the decoder to attend over all positions in the input sequence. This mimics the\ntypical encoder-decoder attention mechanisms in sequence-to-sequence models such as\n[38, 2, 9].\n\u2022 The encoder contains self-attention layers. In a self-attention layer all of the keys, values\nand queries come from the same place, in this case, the output of the previous layer in the\nencoder. Each position in the encoder can attend to all positions in the previous layer of the\nencoder.\n\u2022 Similarly, self-attention layers in the decoder allow each position in the decoder to attend to\nall positions in the decoder up to and including that position. We need to prevent leftward",
+            "Raffel, Shazeer, Roberts, Lee, Narang, Matena, Zhou, Li and Liu\nx1\nx2\nx3\nx4\nx5\ny5\ny4\ny3\ny2\ny1\nx1\nx2\nx3\nx4\nx5\ny5\ny4\ny3\ny2\ny1\nx1\nx2\nx3\nx4\nx5\ny5\ny4\ny3\ny2\ny1\nFigure 3: Matrices representing different attention mask patterns. The input and output\nof the self-attention mechanism are denoted x and y respectively. A dark cell\nat row i and column j indicates that the self-attention mechanism is allowed to\nattend to input element j at output timestep i. A light cell indicates that the\nself-attention mechanism is not allowed to attend to the corresponding i and j\ncombination. Left: A fully-visible mask allows the self-attention mechanism to\nattend to the full input at every output timestep. Middle: A causal mask prevents\nthe ith output element from depending on any input elements from \u201cthe future\u201d.\nRight: Causal masking with a prefix allows the self-attention mechanism to use\nfully-visible masking on a portion of the input sequence.",
+            "Attention Visualizations\nIt\nis\nin\nthis\nspirit\nthat\na\nmajority\nof\nAmerican\ngovernments\nhave\npassed\nnew\nlaws\nsince\n2009\nmaking\nthe\nregistration\nor\nvoting\nprocess\nmore\ndifficult\n.\n<EOS>\n<pad>\n<pad>\n<pad>\n<pad>\n<pad>\n<pad>\nIt\nis\nin\nthis\nspirit\nthat\na\nmajority\nof\nAmerican\ngovernments\nhave\npassed\nnew\nlaws\nsince\n2009\nmaking\nthe\nregistration\nor\nvoting\nprocess\nmore\ndifficult\n.\n<EOS>\n<pad>\n<pad>\n<pad>\n<pad>\n<pad>\n<pad>\nFigure 3: An example of the attention mechanism following long-distance dependencies in the\nencoder self-attention in layer 5 of 6. Many of the attention heads attend to a distant dependency of\nthe verb \u2018making\u2019, completing the phrase \u2018making...more difficult\u2019. Attentions here shown only for\nthe word \u2018making\u2019. Different colors represent different heads. Best viewed in color.\n13"
+        ],
+        "response_time_seconds": 76.68,
+        "sources": [
+            {
+                "source": "1706.03762v7.pdf",
+                "page": 2
+            },
+            {
+                "source": "1910.10683v4.pdf",
+                "page": 5
+            },
+            {
+                "source": "1706.03762v7.pdf",
+                "page": 5
+            },
+            {
+                "source": "1910.10683v4.pdf",
+                "page": 16
+            },
+            {
+                "source": "1706.03762v7.pdf",
+                "page": 13
+            }
+        ]
+    },
+    {
+        "id": 3,
+        "question": "What is multi-head attention?",
+        "answer": "According to the conversation history and document context, multi-head attention is described in Section 3.2 of the provided document.\n\nMulti-head attention allows the model to jointly attend to information from different representation subspaces at different positions. With a single attention head, averaging inhibits this. In the Transformer, multi-head attention is employed in three different ways:\n\n1. In \"encoder-decoder attention\" layers, the queries come from the previous decoder layer, and the memory keys and values come from the output of the encoder. This allows every position in the decoder to attend over all positions in the input sequence.\n\n2. The encoder contains self-attention layers. In a self-attention layer, all of the keys, values, and queries come from the same place, in this case, the output of the previous layer in the encoder. Each position in the encoder can attend to all positions in the previous layer of the encoder.\n\n3. Similarly, self-attention layers in the decoder allow each position in the decoder to attend to all positions in the decoder up to and including that position. To prevent leftward dependencies between distant positions, linearly for ConvS2S and logarithmically for ByteNet, additional modifications are made.\n\nIn terms of mathematical representation, multi-head attention is defined as:\n\nMultiHead(Q, K, V) = Concat(head1, ..., headh)W O\n\nwhere headi = Attention(QW Qi , KW Ki , V Wi ), and the projections are parameter matrices W Qi \u2208Rdmodel\u00d7dk, W Ki \u2208Rdmodel\u00d7dk, W Vi \u2208Rdmodel\u00d7dv, and W O \u2208Rhdv\u00d7dmodel.",
+        "ground_truth": "Multi-head attention performs multiple attention operations in parallel using different learned projections of queries, keys, and values. The outputs are combined, allowing the model to capture different relationships and representation subspaces.",
+        "contexts": [
+            "output values. These are concatenated and once again projected, resulting in the final values, as\ndepicted in Figure 2.\nMulti-head attention allows the model to jointly attend to information from different representation\nsubspaces at different positions. With a single attention head, averaging inhibits this.\nMultiHead(Q, K, V ) = Concat(head1, ..., headh)W O\nwhere headi = Attention(QW Q\ni , KW K\ni , V W V\ni )\nWhere the projections are parameter matrices W Q\ni\n\u2208Rdmodel\u00d7dk, W K\ni\n\u2208Rdmodel\u00d7dk, W V\ni\n\u2208Rdmodel\u00d7dv\nand W O \u2208Rhdv\u00d7dmodel.\nIn this work we employ h = 8 parallel attention layers, or heads. For each of these we use\ndk = dv = dmodel/h = 64. Due to the reduced dimension of each head, the total computational cost\nis similar to that of single-head attention with full dimensionality.\n3.2.3\nApplications of Attention in our Model\nThe Transformer uses multi-head attention in three different ways:\n\u2022 In \"encoder-decoder attention\" layers, the queries come from the previous decoder layer,",
+            "Applications of Attention in our Model\nThe Transformer uses multi-head attention in three different ways:\n\u2022 In \"encoder-decoder attention\" layers, the queries come from the previous decoder layer,\nand the memory keys and values come from the output of the encoder. This allows every\nposition in the decoder to attend over all positions in the input sequence. This mimics the\ntypical encoder-decoder attention mechanisms in sequence-to-sequence models such as\n[38, 2, 9].\n\u2022 The encoder contains self-attention layers. In a self-attention layer all of the keys, values\nand queries come from the same place, in this case, the output of the previous layer in the\nencoder. Each position in the encoder can attend to all positions in the previous layer of the\nencoder.\n\u2022 Similarly, self-attention layers in the decoder allow each position in the decoder to attend to\nall positions in the decoder up to and including that position. We need to prevent leftward",
+            "in the distance between positions, linearly for ConvS2S and logarithmically for ByteNet. This makes\nit more difficult to learn dependencies between distant positions [12]. In the Transformer this is\nreduced to a constant number of operations, albeit at the cost of reduced effective resolution due\nto averaging attention-weighted positions, an effect we counteract with Multi-Head Attention as\ndescribed in section 3.2.\nSelf-attention, sometimes called intra-attention is an attention mechanism relating different positions\nof a single sequence in order to compute a representation of the sequence. Self-attention has been\nused successfully in a variety of tasks including reading comprehension, abstractive summarization,\ntextual entailment and learning task-independent sentence representations [4, 27, 28, 22].\nEnd-to-end memory networks are based on a recurrent attention mechanism instead of sequence-",
+            "Scaled Dot-Product Attention\nMulti-Head Attention\nFigure 2: (left) Scaled Dot-Product Attention. (right) Multi-Head Attention consists of several\nattention layers running in parallel.\nof the values, where the weight assigned to each value is computed by a compatibility function of the\nquery with the corresponding key.\n3.2.1\nScaled Dot-Product Attention\nWe call our particular attention \"Scaled Dot-Product Attention\" (Figure 2). The input consists of\nqueries and keys of dimension dk, and values of dimension dv. We compute the dot products of the\nquery with all keys, divide each by \u221adk, and apply a softmax function to obtain the weights on the\nvalues.\nIn practice, we compute the attention function on a set of queries simultaneously, packed together\ninto a matrix Q. The keys and values are also packed together into matrices K and V . We compute\nthe matrix of outputs as:\nAttention(Q, K, V ) = softmax(QKT\n\u221adk\n)V\n(1)",
+            "3.2\nAttention\nAn attention function can be described as mapping a query and a set of key-value pairs to an output,\nwhere the query, keys, values, and output are all vectors. The output is computed as a weighted sum\n3"
+        ],
+        "response_time_seconds": 79.03,
+        "sources": [
+            {
+                "source": "1706.03762v7.pdf",
+                "page": 5
+            },
+            {
+                "source": "1706.03762v7.pdf",
+                "page": 5
+            },
+            {
+                "source": "1706.03762v7.pdf",
+                "page": 2
+            },
+            {
+                "source": "1706.03762v7.pdf",
+                "page": 4
+            },
+            {
+                "source": "1706.03762v7.pdf",
+                "page": 3
+            }
+        ]
+    },
+    {
+        "id": 4,
+        "question": "Why does the Transformer not use recurrence?",
+        "answer": "According to Context 1 from the provided document:\n\n\"The fundamental constraint of sequential computation, however, remains... Attention mechanisms have become an integral part of compelling sequence modeling and transduc- tion models in various tasks, allowing modeling of dependencies without regard to their distance in the input or output sequences [2, 19]. In all but a few cases [27], however, such attention mechanisms are used in conjunction with a recurrent network.\"\n\nThis implies that recurrence is used in most cases, but not by the Transformer model.",
+        "ground_truth": "The Transformer removes recurrence and instead relies on attention mechanisms. This allows computations over sequence positions to be performed in parallel and improves the ability to model long-range dependencies.",
+        "contexts": [
+            "sequential nature precludes parallelization within training examples, which becomes critical at longer\nsequence lengths, as memory constraints limit batching across examples. Recent work has achieved\nsignificant improvements in computational efficiency through factorization tricks [21] and conditional\ncomputation [32], while also improving model performance in case of the latter. The fundamental\nconstraint of sequential computation, however, remains.\nAttention mechanisms have become an integral part of compelling sequence modeling and transduc-\ntion models in various tasks, allowing modeling of dependencies without regard to their distance in\nthe input or output sequences [2, 19]. In all but a few cases [27], however, such attention mechanisms\nare used in conjunction with a recurrent network.\nIn this work we propose the Transformer, a model architecture eschewing recurrence and instead\nrelying entirely on an attention mechanism to draw global dependencies between input and output.",
+            "models based on the \u201cTransformer\u201d architecture (Vaswani et al., 2017). The Transformer\nwas initially shown to be effective for machine translation, but it has subsequently been\nused in a wide variety of NLP settings (Radford et al., 2018; Devlin et al., 2018; McCann\net al., 2018; Yu et al., 2018). Due to its increasing ubiquity, all of the models we study are\nbased on the Transformer architecture. Apart from the details mentioned below and the\nvariants we explore in Section 3.2, we do not deviate significantly from this architecture as\noriginally proposed. Instead of providing a comprehensive definition of this model, we refer\nthe interested reader to the original paper (Vaswani et al., 2017) or follow-up tutorials3,4 for\na more detailed introduction.\nThe primary building block of the Transformer is self-attention (Cheng et al., 2016).\nSelf-attention is a variant of attention (Graves, 2013; Bahdanau et al., 2015) that processes",
+            "The primary building block of the Transformer is self-attention (Cheng et al., 2016).\nSelf-attention is a variant of attention (Graves, 2013; Bahdanau et al., 2015) that processes\na sequence by replacing each element by a weighted average of the rest of the sequence.\nThe original Transformer consisted of an encoder-decoder architecture and was intended\nfor sequence-to-sequence (Sutskever et al., 2014; Kalchbrenner et al., 2014) tasks. It has\nrecently also become common to use models consisting of a single Transformer layer stack,\nwith varying forms of self-attention used to produce architectures appropriate for language\nmodeling (Radford et al., 2018; Al-Rfou et al., 2019) or classification and span prediction\ntasks (Devlin et al., 2018; Yang et al., 2019). We empirically explore these architectural\nvariants in Section 3.2.\nOverall, our encoder-decoder Transformer implementation closely follows its originally-",
+            "best models from the literature. We show that the Transformer generalizes well to\nother tasks by applying it successfully to English constituency parsing both with\nlarge and limited training data.\n\u2217Equal contribution. Listing order is random. Jakob proposed replacing RNNs with self-attention and started\nthe effort to evaluate this idea. Ashish, with Illia, designed and implemented the first Transformer models and\nhas been crucially involved in every aspect of this work. Noam proposed scaled dot-product attention, multi-head\nattention and the parameter-free position representation and became the other person involved in nearly every\ndetail. Niki designed, implemented, tuned and evaluated countless model variants in our original codebase and\ntensor2tensor. Llion also experimented with novel model variants, was responsible for our initial codebase, and\nefficient inference and visualizations. Lukasz and Aidan spent countless long days designing various parts of and",
+            "executed operations, whereas a recurrent layer requires O(n) sequential operations. In terms of\ncomputational complexity, self-attention layers are faster than recurrent layers when the sequence\n6"
+        ],
+        "response_time_seconds": 42.79,
+        "sources": [
+            {
+                "source": "1706.03762v7.pdf",
+                "page": 2
+            },
+            {
+                "source": "1910.10683v4.pdf",
+                "page": 4
+            },
+            {
+                "source": "1910.10683v4.pdf",
+                "page": 4
+            },
+            {
+                "source": "1706.03762v7.pdf",
+                "page": 1
+            },
+            {
+                "source": "1706.03762v7.pdf",
+                "page": 6
+            }
+        ]
+    },
+    {
+        "id": 5,
+        "question": "What are the advantages of self-attention?",
+        "answer": "According to Context 5 (Source: 1706.03762v7.pdf, Page: 5), the advantages of self-attention include:\n\n* Reduced computational complexity per layer compared to recurrent layers\n* Ability to parallelize computation with a minimum number of sequential operations required\n* Allows every position in the decoder to attend over all positions in the input sequence, mimicking typical encoder-decoder attention mechanisms in sequence-to-sequence models.",
+        "ground_truth": "Self-attention can connect positions regardless of their distance, requires fewer sequential operations than recurrent networks, and allows better parallelization. It can efficiently model dependencies between distant tokens.",
+        "contexts": [
+            "in the distance between positions, linearly for ConvS2S and logarithmically for ByteNet. This makes\nit more difficult to learn dependencies between distant positions [12]. In the Transformer this is\nreduced to a constant number of operations, albeit at the cost of reduced effective resolution due\nto averaging attention-weighted positions, an effect we counteract with Multi-Head Attention as\ndescribed in section 3.2.\nSelf-attention, sometimes called intra-attention is an attention mechanism relating different positions\nof a single sequence in order to compute a representation of the sequence. Self-attention has been\nused successfully in a variety of tasks including reading comprehension, abstractive summarization,\ntextual entailment and learning task-independent sentence representations [4, 27, 28, 22].\nEnd-to-end memory networks are based on a recurrent attention mechanism instead of sequence-",
+            "Exploring the Limits of Transfer Learning\nmechanism after each self-attention layer that attends to the output of the encoder. The\nself-attention mechanism in the decoder also uses a form of autoregressive or causal self-\nattention, which only allows the model to attend to past outputs. The output of the final\ndecoder block is fed into a dense layer with a softmax output, whose weights are shared with\nthe input embedding matrix. All attention mechanisms in the Transformer are split up into\nindependent \u201cheads\u201d whose outputs are concatenated before being further processed.\nSince self-attention is order-independent (i.e. it is an operation on sets), it is common\nto provide an explicit position signal to the Transformer. While the original Transformer\nused a sinusoidal position signal or learned position embeddings, it has recently become\nmore common to use relative position embeddings (Shaw et al., 2018; Huang et al., 2018a).",
+            "Applications of Attention in our Model\nThe Transformer uses multi-head attention in three different ways:\n\u2022 In \"encoder-decoder attention\" layers, the queries come from the previous decoder layer,\nand the memory keys and values come from the output of the encoder. This allows every\nposition in the decoder to attend over all positions in the input sequence. This mimics the\ntypical encoder-decoder attention mechanisms in sequence-to-sequence models such as\n[38, 2, 9].\n\u2022 The encoder contains self-attention layers. In a self-attention layer all of the keys, values\nand queries come from the same place, in this case, the output of the previous layer in the\nencoder. Each position in the encoder can attend to all positions in the previous layer of the\nencoder.\n\u2022 Similarly, self-attention layers in the decoder allow each position in the decoder to attend to\nall positions in the decoder up to and including that position. We need to prevent leftward",
+            "executed operations, whereas a recurrent layer requires O(n) sequential operations. In terms of\ncomputational complexity, self-attention layers are faster than recurrent layers when the sequence\n6",
+            "PEpos.\nWe also experimented with using learned positional embeddings [9] instead, and found that the two\nversions produced nearly identical results (see Table 3 row (E)). We chose the sinusoidal version\nbecause it may allow the model to extrapolate to sequence lengths longer than the ones encountered\nduring training.\n4\nWhy Self-Attention\nIn this section we compare various aspects of self-attention layers to the recurrent and convolu-\ntional layers commonly used for mapping one variable-length sequence of symbol representations\n(x1, ..., xn) to another sequence of equal length (z1, ..., zn), with xi, zi \u2208Rd, such as a hidden\nlayer in a typical sequence transduction encoder or decoder. Motivating our use of self-attention we\nconsider three desiderata.\nOne is the total computational complexity per layer. Another is the amount of computation that can\nbe parallelized, as measured by the minimum number of sequential operations required."
+        ],
+        "response_time_seconds": 22.06,
+        "sources": [
+            {
+                "source": "1706.03762v7.pdf",
+                "page": 2
+            },
+            {
+                "source": "1910.10683v4.pdf",
+                "page": 5
+            },
+            {
+                "source": "1706.03762v7.pdf",
+                "page": 5
+            },
+            {
+                "source": "1706.03762v7.pdf",
+                "page": 6
+            },
+            {
+                "source": "1706.03762v7.pdf",
+                "page": 6
+            }
+        ]
+    },
+    {
+        "id": 6,
+        "question": "What is encoder-decoder attention?",
+        "answer": "According to the conversation history, specifically Context 1 and Context 2, encoder-decoder attention refers to the mechanism where queries come from the previous decoder layer, and memory keys and values come from the output of the encoder.\n\nThis allows every position in the decoder to attend over all positions in the input sequence, mimicking typical encoder-decoder attention mechanisms found in sequence-to-sequence models.",
+        "ground_truth": "Encoder-decoder attention is an attention mechanism where queries come from the decoder while keys and values come from the encoder output. This allows each decoder position to attend to relevant parts of the input sequence.",
+        "contexts": [
+            "Applications of Attention in our Model\nThe Transformer uses multi-head attention in three different ways:\n\u2022 In \"encoder-decoder attention\" layers, the queries come from the previous decoder layer,\nand the memory keys and values come from the output of the encoder. This allows every\nposition in the decoder to attend over all positions in the input sequence. This mimics the\ntypical encoder-decoder attention mechanisms in sequence-to-sequence models such as\n[38, 2, 9].\n\u2022 The encoder contains self-attention layers. In a self-attention layer all of the keys, values\nand queries come from the same place, in this case, the output of the previous layer in the\nencoder. Each position in the encoder can attend to all positions in the previous layer of the\nencoder.\n\u2022 Similarly, self-attention layers in the decoder allow each position in the decoder to attend to\nall positions in the decoder up to and including that position. We need to prevent leftward",
+            "encoder.\n\u2022 Similarly, self-attention layers in the decoder allow each position in the decoder to attend to\nall positions in the decoder up to and including that position. We need to prevent leftward\ninformation flow in the decoder to preserve the auto-regressive property. We implement this\ninside of scaled dot-product attention by masking out (setting to \u2212\u221e) all values in the input\nof the softmax which correspond to illegal connections. See Figure 2.\n3.3\nPosition-wise Feed-Forward Networks\nIn addition to attention sub-layers, each of the layers in our encoder and decoder contains a fully\nconnected feed-forward network, which is applied to each position separately and identically. This\nconsists of two linear transformations with a ReLU activation in between.\nFFN(x) = max(0, xW1 + b1)W2 + b2\n(2)\nWhile the linear transformations are the same across different positions, they use different parameters",
+            "Dropout (Srivastava et al., 2014) is applied within the feed-forward network, on the skip\nconnection, on the attention weights, and at the input and output of the entire stack. The\ndecoder is similar in structure to the encoder except that it includes a standard attention\n3. http://nlp.seas.harvard.edu/2018/04/03/attention.html\n4. http://jalammar.github.io/illustrated-transformer/\n4",
+            "Exploring the Limits of Transfer Learning\nmechanism after each self-attention layer that attends to the output of the encoder. The\nself-attention mechanism in the decoder also uses a form of autoregressive or causal self-\nattention, which only allows the model to attend to past outputs. The output of the final\ndecoder block is fed into a dense layer with a softmax output, whose weights are shared with\nthe input embedding matrix. All attention mechanisms in the Transformer are split up into\nindependent \u201cheads\u201d whose outputs are concatenated before being further processed.\nSince self-attention is order-independent (i.e. it is an operation on sets), it is common\nto provide an explicit position signal to the Transformer. While the original Transformer\nused a sinusoidal position signal or learned position embeddings, it has recently become\nmore common to use relative position embeddings (Shaw et al., 2018; Huang et al., 2018a).",
+            "bears some resemblance to the shared encoder-decoder approach with a denoising objective\n(Yang et al., 2019). We also note that the shared parameter encoder-decoder outperforms\nthe decoder-only prefix LM, suggesting that the addition of an explicit encoder-decoder\nattention is beneficial. Finally, we confirm the widely-held conception that using a denoising\nobjective always results in better downstream task performance compared to a language\nmodeling objective. This observation has been previously made by Devlin et al. (2018),\nVoita et al. (2019), and Lample and Conneau (2019) among others. We undertake a more\ndetailed exploration of unsupervised objectives in the following section.\n3.3 Unsupervised Objectives\nThe choice of unsupervised objective is of central importance as it provides the mechanism\nthrough which the model gains general-purpose knowledge to apply to downstream tasks.\nThis has led to the development of a wide variety of pre-training objectives (Dai and Le,"
+        ],
+        "response_time_seconds": 47.41,
+        "sources": [
+            {
+                "source": "1706.03762v7.pdf",
+                "page": 5
+            },
+            {
+                "source": "1706.03762v7.pdf",
+                "page": 5
+            },
+            {
+                "source": "1910.10683v4.pdf",
+                "page": 4
+            },
+            {
+                "source": "1910.10683v4.pdf",
+                "page": 5
+            },
+            {
+                "source": "1910.10683v4.pdf",
+                "page": 20
+            }
+        ]
+    },
+    {
+        "id": 7,
+        "question": "What is transfer learning?",
+        "answer": "According to the provided documents, particularly Context 1 and Context 4, Transfer Learning in natural language processing refers to the technique where a model is first pre-trained on a data-rich task before being fine-tuned on a downstream task.\n\nThis process allows the model to leverage knowledge gained from the pre-training task and adapt it to a new, related task. The goal of transfer learning is to efficiently utilize existing resources and adapt them to new tasks or domains, often with fewer data samples than required for traditional training methods.\n\nIn the context of this paper by Colin Raffel et al., Transfer Learning is explored as a unified framework that converts all text-based language problems into a text-to-text format. The authors introduce pre-training objectives, architectures, unlabeled data sets, transfer approaches, and other factors to be compared on dozens of language understanding tasks.\n\nIn essence, Transfer Learning aims to leverage the power of pre-trained models to improve performance on a wide range of NLP tasks without requiring massive amounts of labeled data for each task.",
+        "ground_truth": "Transfer learning is a machine learning approach where knowledge learned from one task is reused to improve performance on another related task. A model is typically pretrained on a large dataset and then adapted or fine-tuned for a specific downstream task.",
+        "contexts": [
+            "Exploring the Limits of Transfer Learning\nSebastian Ruder, Matthew E. Peters, Swabha Swayamdipta, and Thomas Wolf. Transfer\nlearning in natural language processing. In Proceedings of the 2019 Conference of the\nNorth American Chapter of the Association for Computational Linguistics: Tutorials,\npages 15\u201318, 2019.\nOlga Russakovsky, Jia Deng, Hao Su, Jonathan Krause, Sanjeev Satheesh, Sean Ma, Zhiheng\nHuang, Andrej Karpathy, Aditya Khosla, Michael Bernstein, et al. ImageNet large scale\nvisual recognition challenge. International journal of computer vision, 2015.\nVictor Sanh, Lysandre Debut, Julien Chaumond, and Thomas Wolf. DistilBERT, a distilled\nversion of BERT: smaller, faster, cheaper and lighter. arXiv preprint arXiv:1910.01108,\n2019.\nAbigail See, Peter J. Liu, and Christopher D. Manning. Get to the point: Summarization\nwith pointer-generator networks. arXiv preprint arXiv:1704.04368, 2017.\nRico Sennrich, Barry Haddow, and Alexandra Birch. Neural machine translation of rare",
+            "Journal of Machine Learning Research 21 (2020) 1-67\nSubmitted 1/20; Revised 6/20; Published 6/20\nExploring the Limits of Transfer Learning with a Unified\nText-to-Text Transformer\nColin Raffel\u2217\ncraffel@gmail.com\nNoam Shazeer\u2217\nnoam@google.com\nAdam Roberts\u2217\nadarob@google.com\nKatherine Lee\u2217\nkatherinelee@google.com\nSharan Narang\nsharannarang@google.com\nMichael Matena\nmmatena@google.com\nYanqi Zhou\nyanqiz@google.com\nWei Li\nmweili@google.com\nPeter J. Liu\npeterjliu@google.com\nGoogle, Mountain View, CA 94043, USA\nEditor: Ivan Titov\nAbstract\nTransfer learning, where a model is first pre-trained on a data-rich task before being fine-\ntuned on a downstream task, has emerged as a powerful technique in natural language\nprocessing (NLP). The effectiveness of transfer learning has given rise to a diversity of\napproaches, methodology, and practice. In this paper, we explore the landscape of transfer\nlearning techniques for NLP by introducing a unified framework that converts all text-based",
+            "Exploring the Limits of Transfer Learning\nChristian Buck, Kenneth Heafield, and Bas Van Ooyen. N-gram counts and language models\nfrom the common crawl. In LREC, 2014.\nRich Caruana. Multitask learning. Machine learning, 28(1), 1997.\nDaniel Cer, Mona Diab, Eneko Agirre, Inigo Lopez-Gazpio, and Lucia Specia. Semeval-2017\ntask 1: Semantic textual similarity-multilingual and cross-lingual focused evaluation.\narXiv preprint arXiv:1708.00055, 2017.\nJianpeng Cheng, Li Dong, and Mirella Lapata. Long short-term memory-networks for\nmachine reading. arXiv preprint arXiv:1601.06733, 2016.\nChristopher Clark, Kenton Lee, Ming-Wei Chang, Tom Kwiatkowski, Michael Collins, and\nKristina Toutanova. BoolQ: Exploring the surprising difficulty of natural yes/no questions.\narXiv preprint arXiv:1905.10044, 2019.\nKevin Clark, Minh-Thang Luong, Quoc V Le, and Christopher D Manning.\nElectra:\nPre-training text encoders as discriminators rather than generators.\narXiv preprint\narXiv:2003.10555, 2020.",
+            "approaches, methodology, and practice. In this paper, we explore the landscape of transfer\nlearning techniques for NLP by introducing a unified framework that converts all text-based\nlanguage problems into a text-to-text format. Our systematic study compares pre-training\nobjectives, architectures, unlabeled data sets, transfer approaches, and other factors on\ndozens of language understanding tasks. By combining the insights from our exploration\nwith scale and our new \u201cColossal Clean Crawled Corpus\u201d, we achieve state-of-the-art results\non many benchmarks covering summarization, question answering, text classification, and\nmore. To facilitate future work on transfer learning for NLP, we release our data set,\npre-trained models, and code.1\nKeywords:\ntransfer learning, natural language processing, multi-task learning, attention-\nbased models, deep learning\n1. Introduction\nTraining a machine learning model to perform natural language processing (NLP) tasks",
+            "Exploring the Limits of Transfer Learning\n0\n100\n200\n300\n400\n500\nStep \u00d7 1,000\n0.0\n0.2\n0.4\n0.6\n0.8\n1.0\nTraining loss\nDataset size\nFull dataset\n229\n227\n225\n223\nFigure 6: Pre-training loss for our original C4 data set as well as 4 artificially truncated\nversions. The sizes listed refer to the number of tokens in each data set. The four\nsizes considered correspond to repeating the data set between 64 and 4,096 times\nover the course of pre-training. Using a smaller data set size results in smaller\ntraining loss values, which may suggest some memorization of the unlabeled data\nset.\n3.5.1 Fine-tuning Methods\nIt has been argued that fine-tuning all of the model\u2019s parameters can lead to suboptimal\nresults, particularly on low-resource tasks (Peters et al., 2019). Early results on transfer\nlearning for text classification tasks advocated fine-tuning only the parameters of a small\nclassifier that was fed sentence embeddings produced by a fixed pre-trained model (Subra-"
+        ],
+        "response_time_seconds": 79.21,
+        "sources": [
+            {
+                "source": "1910.10683v4.pdf",
+                "page": 65
+            },
+            {
+                "source": "1910.10683v4.pdf",
+                "page": 1
+            },
+            {
+                "source": "1910.10683v4.pdf",
+                "page": 59
+            },
+            {
+                "source": "1910.10683v4.pdf",
+                "page": 1
+            },
+            {
+                "source": "1910.10683v4.pdf",
+                "page": 29
+            }
+        ]
+    },
+    {
+        "id": 8,
+        "question": "How does causal self-attention work?",
+        "answer": "From Context 2 (Page 16) and Context 4 (Figure 3), we can see that causal masking is used to restrict the attention mechanism in the Transformer's decoder.\n\nCausal self-attention works by preventing the model from attending to future tokens during training. This is achieved through a \"causal\" masking pattern, where the ith entry of the output sequence cannot attend to any input elements from j > i. In other words, the model can only consider past tokens when producing its output.\n\nThis is illustrated in Figure 3 (Right), which shows that causal masking with a prefix allows the self-attention mechanism to use fully-visible masking on a portion of the input sequence. This means that the model can attend to all positions in the input sequence during training, but it cannot consider future tokens when generating its output.\n\nIn practice, this is used to prevent the model from \"seeing into the future\" and making predictions based on information that has not yet been generated.",
+        "ground_truth": "Causal self-attention uses a mask so that each position can attend only to previous positions and itself, but not future positions. This enables autoregressive generation because predictions cannot use information from future tokens.",
+        "contexts": [
+            "Exploring the Limits of Transfer Learning\nmechanism after each self-attention layer that attends to the output of the encoder. The\nself-attention mechanism in the decoder also uses a form of autoregressive or causal self-\nattention, which only allows the model to attend to past outputs. The output of the final\ndecoder block is fed into a dense layer with a softmax output, whose weights are shared with\nthe input embedding matrix. All attention mechanisms in the Transformer are split up into\nindependent \u201cheads\u201d whose outputs are concatenated before being further processed.\nSince self-attention is order-independent (i.e. it is an operation on sets), it is common\nto provide an explicit position signal to the Transformer. While the original Transformer\nused a sinusoidal position signal or learned position embeddings, it has recently become\nmore common to use relative position embeddings (Shaw et al., 2018; Huang et al., 2018a).",
+            "Right: Causal masking with a prefix allows the self-attention mechanism to use\nfully-visible masking on a portion of the input sequence.\nat the timestep corresponding to the classification token is then used to make a prediction\nfor classifying the input sequence.\nThe self-attention operations in the Transformer\u2019s decoder use a \u201ccausal\u201d masking pattern.\nWhen producing the ith entry of the output sequence, causal masking prevents the model\nfrom attending to the jth entry of the input sequence for j > i. This is used during training\nso that the model can\u2019t \u201csee into the future\u201d as it produces its output. An attention matrix\nfor this masking pattern is shown in Figure 3, middle.\nThe decoder in an encoder-decoder Transformer is used to autoregressively produce an\noutput sequence. That is, at each output timestep, a token is sampled from the model\u2019s\npredicted distribution and the sample is fed back into the model to produce a prediction for",
+            "in the distance between positions, linearly for ConvS2S and logarithmically for ByteNet. This makes\nit more difficult to learn dependencies between distant positions [12]. In the Transformer this is\nreduced to a constant number of operations, albeit at the cost of reduced effective resolution due\nto averaging attention-weighted positions, an effect we counteract with Multi-Head Attention as\ndescribed in section 3.2.\nSelf-attention, sometimes called intra-attention is an attention mechanism relating different positions\nof a single sequence in order to compute a representation of the sequence. Self-attention has been\nused successfully in a variety of tasks including reading comprehension, abstractive summarization,\ntextual entailment and learning task-independent sentence representations [4, 27, 28, 22].\nEnd-to-end memory networks are based on a recurrent attention mechanism instead of sequence-",
+            "Raffel, Shazeer, Roberts, Lee, Narang, Matena, Zhou, Li and Liu\nx1\nx2\nx3\nx4\nx5\ny5\ny4\ny3\ny2\ny1\nx1\nx2\nx3\nx4\nx5\ny5\ny4\ny3\ny2\ny1\nx1\nx2\nx3\nx4\nx5\ny5\ny4\ny3\ny2\ny1\nFigure 3: Matrices representing different attention mask patterns. The input and output\nof the self-attention mechanism are denoted x and y respectively. A dark cell\nat row i and column j indicates that the self-attention mechanism is allowed to\nattend to input element j at output timestep i. A light cell indicates that the\nself-attention mechanism is not allowed to attend to the corresponding i and j\ncombination. Left: A fully-visible mask allows the self-attention mechanism to\nattend to the full input at every output timestep. Middle: A causal mask prevents\nthe ith output element from depending on any input elements from \u201cthe future\u201d.\nRight: Causal masking with a prefix allows the self-attention mechanism to use\nfully-visible masking on a portion of the input sequence.",
+            "Applications of Attention in our Model\nThe Transformer uses multi-head attention in three different ways:\n\u2022 In \"encoder-decoder attention\" layers, the queries come from the previous decoder layer,\nand the memory keys and values come from the output of the encoder. This allows every\nposition in the decoder to attend over all positions in the input sequence. This mimics the\ntypical encoder-decoder attention mechanisms in sequence-to-sequence models such as\n[38, 2, 9].\n\u2022 The encoder contains self-attention layers. In a self-attention layer all of the keys, values\nand queries come from the same place, in this case, the output of the previous layer in the\nencoder. Each position in the encoder can attend to all positions in the previous layer of the\nencoder.\n\u2022 Similarly, self-attention layers in the decoder allow each position in the decoder to attend to\nall positions in the decoder up to and including that position. We need to prevent leftward"
+        ],
+        "response_time_seconds": 76.18,
+        "sources": [
+            {
+                "source": "1910.10683v4.pdf",
+                "page": 5
+            },
+            {
+                "source": "1910.10683v4.pdf",
+                "page": 16
+            },
+            {
+                "source": "1706.03762v7.pdf",
+                "page": 2
+            },
+            {
+                "source": "1910.10683v4.pdf",
+                "page": 16
+            },
+            {
+                "source": "1706.03762v7.pdf",
+                "page": 5
+            }
+        ]
+    },
+    {
+        "id": 9,
+        "question": "What are positional encodings used for?",
+        "answer": "According to Context 1 from the document (1706.03762v7.pdf, Page 6), positional encodings are added to the input embeddings at the bottoms of the encoder and decoder stacks. They have the same dimension dmodel as the embeddings, so that the two can be summed.\n\nIn this work, they use sine and cosine functions of different frequencies:\n\nPE(pos,2i) = sin(pos/100002i/dmodel)\nPE(pos,2i+1) = cos(pos/100002i/dmodel)\n\nwhere pos is the position and i is the dimension. This allows the model to easily learn to attend by relative positions, since for any fixed offset k, PEpos+k can be represented as a linear function of PEpos.\n\nThe positional encodings are used to allow each position in the sequence to understand its position relative to other positions.",
+        "ground_truth": "Positional encodings provide information about the position of tokens in a sequence. They are added to input embeddings because the Transformer architecture does not use recurrence or convolution and therefore does not inherently understand token order.",
+        "contexts": [
+            "tokens in the sequence. To this end, we add \"positional encodings\" to the input embeddings at the\nbottoms of the encoder and decoder stacks. The positional encodings have the same dimension dmodel\nas the embeddings, so that the two can be summed. There are many choices of positional encodings,\nlearned and fixed [9].\nIn this work, we use sine and cosine functions of different frequencies:\nPE(pos,2i) = sin(pos/100002i/dmodel)\nPE(pos,2i+1) = cos(pos/100002i/dmodel)\nwhere pos is the position and i is the dimension. That is, each dimension of the positional encoding\ncorresponds to a sinusoid. The wavelengths form a geometric progression from 2\u03c0 to 10000 \u00b7 2\u03c0. We\nchose this function because we hypothesized it would allow the model to easily learn to attend by\nrelative positions, since for any fixed offset k, PEpos+k can be represented as a linear function of\nPEpos.\nWe also experimented with using learned positional embeddings [9] instead, and found that the two",
+            "positional encodings in both the encoder and decoder stacks. For the base model, we use a rate of\nPdrop = 0.1.\nLabel Smoothing\nDuring training, we employed label smoothing of value \u03f5ls = 0.1 [36]. This\nhurts perplexity, as the model learns to be more unsure, but improves accuracy and BLEU score.\n6\nResults\n6.1\nMachine Translation\nOn the WMT 2014 English-to-German translation task, the big transformer model (Transformer (big)\nin Table 2) outperforms the best previously reported models (including ensembles) by more than 2.0\nBLEU, establishing a new state-of-the-art BLEU score of 28.4. The configuration of this model is\nlisted in the bottom line of Table 3. Training took 3.5 days on 8 P100 GPUs. Even our base model\nsurpasses all previously published models and ensembles, at a fraction of the training cost of any of\nthe competitive models.\nOn the WMT 2014 English-to-French translation task, our big model achieves a BLEU score of 41.0,",
+            "encoder.\n\u2022 Similarly, self-attention layers in the decoder allow each position in the decoder to attend to\nall positions in the decoder up to and including that position. We need to prevent leftward\ninformation flow in the decoder to preserve the auto-regressive property. We implement this\ninside of scaled dot-product attention by masking out (setting to \u2212\u221e) all values in the input\nof the softmax which correspond to illegal connections. See Figure 2.\n3.3\nPosition-wise Feed-Forward Networks\nIn addition to attention sub-layers, each of the layers in our encoder and decoder contains a fully\nconnected feed-forward network, which is applied to each position separately and identically. This\nconsists of two linear transformations with a ReLU activation in between.\nFFN(x) = max(0, xW1 + b1)W2 + b2\n(2)\nWhile the linear transformations are the same across different positions, they use different parameters",
+            "used a sinusoidal position signal or learned position embeddings, it has recently become\nmore common to use relative position embeddings (Shaw et al., 2018; Huang et al., 2018a).\nInstead of using a fixed embedding for each position, relative position embeddings produce\na different learned embedding according to the offset between the \u201ckey\u201d and \u201cquery\u201d being\ncompared in the self-attention mechanism. We use a simplified form of position embeddings\nwhere each \u201cembedding\u201d is simply a scalar that is added to the corresponding logit used\nfor computing the attention weights. For efficiency, we also share the position embedding\nparameters across all layers in our model, though within a given layer each attention head\nuses a different learned position embedding. Typically, a fixed number of embeddings are\nlearned, each corresponding to a range of possible key-query offsets. In this work, we use 32\nembeddings for all of our models with ranges that increase in size logarithmically up to an",
+            "Applications of Attention in our Model\nThe Transformer uses multi-head attention in three different ways:\n\u2022 In \"encoder-decoder attention\" layers, the queries come from the previous decoder layer,\nand the memory keys and values come from the output of the encoder. This allows every\nposition in the decoder to attend over all positions in the input sequence. This mimics the\ntypical encoder-decoder attention mechanisms in sequence-to-sequence models such as\n[38, 2, 9].\n\u2022 The encoder contains self-attention layers. In a self-attention layer all of the keys, values\nand queries come from the same place, in this case, the output of the previous layer in the\nencoder. Each position in the encoder can attend to all positions in the previous layer of the\nencoder.\n\u2022 Similarly, self-attention layers in the decoder allow each position in the decoder to attend to\nall positions in the decoder up to and including that position. We need to prevent leftward"
+        ],
+        "response_time_seconds": 76.2,
+        "sources": [
+            {
+                "source": "1706.03762v7.pdf",
+                "page": 6
+            },
+            {
+                "source": "1706.03762v7.pdf",
+                "page": 8
+            },
+            {
+                "source": "1706.03762v7.pdf",
+                "page": 5
+            },
+            {
+                "source": "1910.10683v4.pdf",
+                "page": 5
+            },
+            {
+                "source": "1706.03762v7.pdf",
+                "page": 5
+            }
+        ]
+    },
+    {
+        "id": 10,
+        "question": "What are the main components of a Transformer?",
+        "answer": "According to Context 1 (Source: 1706.03762v7.pdf, Page: 3) and Context 4 (Source: 1910.10683v4.pdf, Page: 4), the main components of a Transformer are:\n\n1. Encoder and Decoder Stacks:\n   - Encoder: composed of a stack of N = 6 identical layers, each having two sub-layers.\n     - The first sub-layer is a multi-head self-attention mechanism.\n     - The second sub-layer is a simple, position-wise fully connected feed-forward network.\n     - These sub-layers use residual connections and layer normalization.\n\n   - Decoder: also composed of a stack of N = 6 identical layers, with the same architecture as the encoder.\n\n2. Self-Attention:\n   - A primary building block of the Transformer that processes a sequence by replacing each element\n     by a weighted average of the rest of the sequence.\n   - A variant of attention (Graves, 2013; Bahdanau et al., 2015).\n\nThese components work together to process sequences and generate output.",
+        "ground_truth": "The main components of a Transformer include an encoder, a decoder, multi-head attention, feed-forward neural networks, residual connections, layer normalization, positional encodings, and output layers.",
+        "contexts": [
+            "Figure 1: The Transformer - model architecture.\nThe Transformer follows this overall architecture using stacked self-attention and point-wise, fully\nconnected layers for both the encoder and decoder, shown in the left and right halves of Figure 1,\nrespectively.\n3.1\nEncoder and Decoder Stacks\nEncoder:\nThe encoder is composed of a stack of N = 6 identical layers. Each layer has two\nsub-layers. The first is a multi-head self-attention mechanism, and the second is a simple, position-\nwise fully connected feed-forward network. We employ a residual connection [11] around each of\nthe two sub-layers, followed by layer normalization [1]. That is, the output of each sub-layer is\nLayerNorm(x + Sublayer(x)), where Sublayer(x) is the function implemented by the sub-layer\nitself. To facilitate these residual connections, all sub-layers in the model, as well as the embedding\nlayers, produce outputs of dimension dmodel = 512.\nDecoder:",
+            "models based on the \u201cTransformer\u201d architecture (Vaswani et al., 2017). The Transformer\nwas initially shown to be effective for machine translation, but it has subsequently been\nused in a wide variety of NLP settings (Radford et al., 2018; Devlin et al., 2018; McCann\net al., 2018; Yu et al., 2018). Due to its increasing ubiquity, all of the models we study are\nbased on the Transformer architecture. Apart from the details mentioned below and the\nvariants we explore in Section 3.2, we do not deviate significantly from this architecture as\noriginally proposed. Instead of providing a comprehensive definition of this model, we refer\nthe interested reader to the original paper (Vaswani et al., 2017) or follow-up tutorials3,4 for\na more detailed introduction.\nThe primary building block of the Transformer is self-attention (Cheng et al., 2016).\nSelf-attention is a variant of attention (Graves, 2013; Bahdanau et al., 2015) that processes",
+            "Table 3: Variations on the Transformer architecture. Unlisted values are identical to those of the base\nmodel. All metrics are on the English-to-German translation development set, newstest2013. Listed\nperplexities are per-wordpiece, according to our byte-pair encoding, and should not be compared to\nper-word perplexities.\nN\ndmodel\ndff\nh\ndk\ndv\nPdrop\n\u03f5ls\ntrain\nPPL\nBLEU\nparams\nsteps\n(dev)\n(dev)\n\u00d7106\nbase\n6\n512\n2048\n8\n64\n64\n0.1\n0.1\n100K\n4.92\n25.8\n65\n(A)\n1\n512\n512\n5.29\n24.9\n4\n128\n128\n5.00\n25.5\n16\n32\n32\n4.91\n25.8\n32\n16\n16\n5.01\n25.4\n(B)\n16\n5.16\n25.1\n58\n32\n5.01\n25.4\n60\n(C)\n2\n6.11\n23.7\n36\n4\n5.19\n25.3\n50\n8\n4.88\n25.5\n80\n256\n32\n32\n5.75\n24.5\n28\n1024\n128\n128\n4.66\n26.0\n168\n1024\n5.12\n25.4\n53\n4096\n4.75\n26.2\n90\n(D)\n0.0\n5.77\n24.6\n0.2\n4.95\n25.5\n0.0\n4.67\n25.3\n0.2\n5.47\n25.7\n(E)\npositional embedding instead of sinusoids\n4.92\n25.7\nbig\n6\n1024\n4096\n16\n0.3\n300K\n4.33\n26.4\n213\ndevelopment set, newstest2013. We used beam search as described in the previous section, but no",
+            "The primary building block of the Transformer is self-attention (Cheng et al., 2016).\nSelf-attention is a variant of attention (Graves, 2013; Bahdanau et al., 2015) that processes\na sequence by replacing each element by a weighted average of the rest of the sequence.\nThe original Transformer consisted of an encoder-decoder architecture and was intended\nfor sequence-to-sequence (Sutskever et al., 2014; Kalchbrenner et al., 2014) tasks. It has\nrecently also become common to use models consisting of a single Transformer layer stack,\nwith varying forms of self-attention used to produce architectures appropriate for language\nmodeling (Radford et al., 2018; Al-Rfou et al., 2019) or classification and span prediction\ntasks (Devlin et al., 2018; Yang et al., 2019). We empirically explore these architectural\nvariants in Section 3.2.\nOverall, our encoder-decoder Transformer implementation closely follows its originally-",
+            "coder based on the original implementation de-\nscribed in Vaswani et al. (2017) and released in\nthe tensor2tensor library.1 Because the use\nof Transformers has become common and our im-\nplementation is almost identical to the original,\nwe will omit an exhaustive background descrip-\ntion of the model architecture and refer readers to\nVaswani et al. (2017) as well as excellent guides\nsuch as \u201cThe Annotated Transformer.\u201d2\nIn this work, we denote the number of layers\n(i.e., Transformer blocks) as L, the hidden size as\nH, and the number of self-attention heads as A.3\nWe primarily report results on two model sizes:\nBERTBASE (L=12, H=768, A=12, Total Param-\neters=110M) and BERTLARGE (L=24, H=1024,\nA=16, Total Parameters=340M).\nBERTBASE was chosen to have the same model\nsize as OpenAI GPT for comparison purposes.\nCritically, however, the BERT Transformer uses\nbidirectional self-attention, while the GPT Trans-\nformer uses constrained self-attention where every"
+        ],
+        "response_time_seconds": 97.43,
+        "sources": [
+            {
+                "source": "1706.03762v7.pdf",
+                "page": 3
+            },
+            {
+                "source": "1910.10683v4.pdf",
+                "page": 4
+            },
+            {
+                "source": "1706.03762v7.pdf",
+                "page": 9
+            },
+            {
+                "source": "1910.10683v4.pdf",
+                "page": 4
+            },
+            {
+                "source": "1810.04805v2.pdf",
+                "page": 3
+            }
+        ]
+    }
+]

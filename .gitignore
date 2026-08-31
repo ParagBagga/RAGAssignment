@@ -1,0 +1,22 @@
+# Virtual environment
+.venv/
+venv/
+
+# Python cache
+__pycache__/
+*.pyc
+
+# Environment variables
+.env
+
+# IDE
+.vscode/
+.idea/
+
+# Generated large files
+data/processed/embedded_chunks.json
+data/processed/faiss_index.bin
+
+# OS files
+.DS_Store
+Thumbs.db

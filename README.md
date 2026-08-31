@@ -121,6 +121,8 @@ Used for generating answers from the retrieved document context.
 
 # Install:
 
+Ollama was deployed inside a Docker container, and all required local models (Llama 3.2, Qwen 2.5 3B, and nomic-embed-text) were pulled and managed within the Ollama environment. The Python RAG application communicated with the Ollama service through http://localhost:11434.
+
 ollama pull llama3.2
 Qwen 3B
 

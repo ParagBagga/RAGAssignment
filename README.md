@@ -17,7 +17,7 @@ The project uses local AI models through Ollama for answer generation, embedding
 - PyPDF
 - Pandas
 
----
+
 
 # Architecture
 
@@ -101,13 +101,7 @@ Python 3.10 or above
 Ollama
 Install Ollama
 
-Download and install Ollama from:
-
-https://ollama.com/
-
-Verify the installation:
-
-ollama --version
+Ollama was deployed inside a Docker container, and all required local models (Llama 3.2, Qwen 2.5 3B, and nomic-embed-text) were pulled and managed within the Ollama environment. The Python RAG application communicated with the Ollama service through http://localhost:11434.
 
 
 
@@ -121,34 +115,24 @@ Used for generating answers from the retrieved document context.
 
 # Install:
 
-Ollama was deployed inside a Docker container, and all required local models (Llama 3.2, Qwen 2.5 3B, and nomic-embed-text) were pulled and managed within the Ollama environment. The Python RAG application communicated with the Ollama service through http://localhost:11434.
 
-ollama pull llama3.2
-Qwen 3B
-
-Used for local RAGAS evaluation.
+ollama pull 
+llama3.2
+Qwen 3B   (Used for local RAGAS evaluation.)
 
 # Install:
 
 ollama pull qwen2.5:3b
 Nomic Embed Text
 
-Used for generating embeddings for documents and evaluation.
-
 # Install:
 
-ollama pull nomic-embed-text
-Verify Installed Models
-
-Run:
-
-ollama list
-
-You should see the installed models.
+ollama pull
+nomic-embed-text
 
 Installation
 1. Clone the Repository
-git clone <repository-url>
+git clone <https://github.com/ParagBagga/RAGAssignment.git>
 cd RAGAssignment
 2. Create a Virtual Environment
 Windows
@@ -159,9 +143,8 @@ python -m venv .venv
 source .venv/bin/activate
 3. Install Dependencies
 pip install -r requirements.txt
-Adding Documents
 
-Place PDF documents inside the following directory:
+4. Place PDF documents inside the following directory:
 
 data/pdfs/
 
@@ -417,10 +400,10 @@ python -m src.rag
 
 To run the evaluation:
 
-# Generate evaluation data
+# Step 5: Generate evaluation data
 python -m src.evaluation.evaluate
 
-# Run RAGAS evaluation
+# Step 6 :Run RAGAS evaluation
 python -m src.evaluation.ragas_evaluation
 Requirements
 
